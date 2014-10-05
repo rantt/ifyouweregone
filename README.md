@@ -17,7 +17,7 @@ Instructions
 ```
 npm install grunt-cli
 npm install
-grunt
+grunt setup
 ```
 
 3) Enjoy!

@@ -12,7 +12,7 @@ module.exports = (grunt) ->
     # from GH, later on phaser might have Bower support
     'curl-dir':
       '<%= SRC_DIR %>/js/lib/': [
-        'https://raw.github.com/photonstorm/phaser/master/build/phaser.min.js','https://raw.github.com/photonstorm/phaser/master/build/phaser.map'
+        'https://raw.github.com/photonstorm/phaser/master/build/phaser.min.js', 'https://raw.github.com/photonstorm/phaser/master/build/phaser.map', 'https://github.com/englercj/phaser-debug/releases/download/v1.1.0/phaser-debug.js'
       ]
 
 
@@ -174,4 +174,5 @@ module.exports = (grunt) ->
                          'imagemin', 'cssmin', 'copy', 'processhtml']
   @registerTask 'server',  ['jshint', 'connect', 'watch']
   @registerTask 'update', ['curl-dir']
+  @registerTask 'setup', ['curl-dir']
   @registerTask 'default', ['server']
