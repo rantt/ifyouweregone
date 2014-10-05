@@ -14,9 +14,9 @@ Game.Boot.prototype = {
   preload: function() {
     // console.log('blah'+Game.w);
 		this.game.stage.backgroundColor = '#FFF';
-		this.game.load.images('loading', 'assets/images/loading.png');
-		this.game.load.images('title', 'assets/images/title.png');
-		this.game.load.images('instructions', 'assets/images/instructions.png');
+		this.game.load.image('loading', 'assets/images/loading.png');
+		this.game.load.image('title', 'assets/images/title.png');
+		this.game.load.image('instructions', 'assets/images/instructions.png');
   },
   create: function() {
    this.game.state.start('Load');
@@ -29,6 +29,9 @@ Game.Load = function(game) {
 
 Game.Load.prototype = {
   preload: function() {
+    
+    //Debug Plugin
+    // this.game.add.plugin(Phaser.Plugin.Debug);
 
     //Loading Screen Message/bar
     var loadingText = this.game.add.text(Game.w, Game.h, 'Loading...', { font: '30px Helvetica', fill: '#000' });
