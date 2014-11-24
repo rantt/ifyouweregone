@@ -46,6 +46,14 @@ module.exports = (grunt) ->
           src: ['**']
           dest: '<%= DST_DIR %>/assets/audio/'
         ]
+      libs:
+        files: [
+          expand: true
+          flatten: false
+          cwd: '<%= SRC_DIR %>/js/libs/'
+          src: ['**']
+          dest: '<%= DST_DIR %>/js/libs/'
+        ]
       index:
         files: [
           src: ['<%= SRC_DIR %>/<%= INDEX_FILE %>]']
