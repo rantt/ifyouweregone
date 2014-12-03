@@ -54,6 +54,14 @@ module.exports = (grunt) ->
           src: ['**']
           dest: '<%= DST_DIR %>/js/libs/'
         ]
+      screenshots:
+        files: [
+          expand: true
+          flatten: false
+          cwd: '<%= SRC_DIR %>/../screenshots/'
+          src: ['**']
+          dest: '<%= DST_DIR %>/screenshots/'
+        ]
       index:
         files: [
           src: ['<%= SRC_DIR %>/<%= INDEX_FILE %>]']
