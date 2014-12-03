@@ -22,5 +22,4 @@ grunt setup
 
 3) Enjoy!
 
-
-_Originally named phaser-boiler-template, renamed because I hate typing :)_
+4) Remember to comment out the debug plugin before running `grunt dist`.
