@@ -29,6 +29,7 @@ Game.Play.prototype = {
 
     //Draw a white square
     var playerbmd = this.game.add.bitmapData(32, 32);
+        playerbmd.ctx.strokeStyle = '#000';
         playerbmd.ctx.rect(0, 0, 32, 32);
         playerbmd.ctx.fillStyle = '#fff';
         playerbmd.ctx.fill();
@@ -41,7 +42,8 @@ Game.Play.prototype = {
         groundbmd.ctx.beginPath();
         groundbmd.ctx.rect(0, 0, 16, 16);  
         groundbmd.ctx.rect(16, 16, 16, 16);
-        groundbmd.ctx.fillStyle = '#bbb';
+        // groundbmd.ctx.fillStyle = '#bbb';
+        groundbmd.ctx.fillStyle = '#ff0000';
         groundbmd.ctx.fill();
 
 
@@ -60,7 +62,8 @@ Game.Play.prototype = {
     player = this.game.add.sprite(128, this.game.world.centerY, playerbmd, 0, group);
     this.game.physics.arcade.enable(player);
     player.anchor.set(0.5);
-    player.tint = 0x00ff00;
+    // player.tint = 0x00ff00;
+    player.tint = 0xffffff;
     player.body.gravity.y = 750;
 
 
@@ -89,10 +92,16 @@ Game.Play.prototype = {
     ground.tilePosition.x = scrollPosition;
     background.tilePosition.x = scrollPosition * 0.1;
 
-    if (spaceKey.isDown) {
-      player.body.velocity.y = -300;
-      console.log('jumpy'+player.body.velocity.y);
+    if (spaceKey.isDown && player.body.touching.down) {
+      player.body.velocity.y = -600;
+        this.game.add.tween(player).to({angle: player.angle - 270}, 800, Phaser.Easing.Linear.None).start();
     }
+
+    spaceKey.onUp.add(function() {
+      if (player.body.velocity.y < -200) {
+        player.body.velocity.y = -200;
+      }
+    },this);
 
 
     // background.tilePosition.x = -(scrollPosition * 0.005);
