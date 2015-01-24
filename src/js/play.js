@@ -16,8 +16,7 @@ var group,
     player,
     ground,
     background,
-    scrollPosition = 0,
-    pillars;
+    scrollPosition = 0;
 
 Game.Play = function(game) {
   this.game = game;
@@ -70,7 +69,6 @@ Game.Play.prototype = {
     player = this.game.add.sprite(128, this.game.world.centerY, this.playerbmd, 0, group);
     this.game.physics.arcade.enable(player);
     player.anchor.set(0.5);
-    // player.tint = 0x00ff00;
     player.tint = 0xffffff;
     player.body.gravity.y = 750;
 
@@ -95,13 +93,14 @@ Game.Play.prototype = {
   addPillars: function() {
     var hole = Math.floor(Math.random() * 5) + 1;
      // Add the 6 pipes 
-     for (var i = 0; i < 9; i++)
-       if (i != hole && i != hole + 1 && i != hole + 2) { 
+     for (var i = 0; i < 9; i++) {
+       if (i !== hole && i !== hole + 1 && i !== hole + 2) { 
          this.addPillar(800, i * 32 + 280, i);   
        }
+     }
   },
   addPillar: function(x,y, i) {
-    var p = this.add.sprite(x, y, this.playerbmd, 0)
+    var p = this.add.sprite(x, y, this.playerbmd, 0);
     p.checkWorldBounds = true;
     p.outOfBoundsKill = true;
 
