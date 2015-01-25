@@ -35,6 +35,13 @@ Game.Play.prototype = {
     this.playerbmd.ctx.fillStyle = '#fff';
     this.playerbmd.ctx.fill();
 
+    this.debris = this.game.add.bitmapData(8, 8);
+    this.debris.ctx.strokeStyle = '#000';
+    this.debris.ctx.rect(0, 0, 32, 32);
+    this.debris.ctx.fillStyle = '#fff';
+    this.debris.ctx.fill();
+
+
     //Draw a black and white checker board
     var groundbmd = this.game.add.bitmapData(32, 32);
         groundbmd.ctx.rect(0, 0, 32, 32);
@@ -46,13 +53,6 @@ Game.Play.prototype = {
         // groundbmd.ctx.fillStyle = '#bbb';
         groundbmd.ctx.fillStyle = '#ff0000';
         groundbmd.ctx.fill();
-
-    var pillar = this.game.add.bitmapData(32, 64);
-        pillar.ctx.rect(0, 0, 32, 64);
-        pillar.ctx.fillStyle = '#fff';
-        pillar.ctx.fill();
-
-    this.pillars = this.game.add.group();
 
     background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, groundbmd);
     background.tileScale.set(4);
@@ -72,6 +72,8 @@ Game.Play.prototype = {
     player.tint = 0xffffff;
     player.body.gravity.y = 750;
 
+    this.pillars = this.game.add.group();
+
     this.timer = this.game.time.events.loop(1500, this.addPillars, this);  
 
     // // Music
@@ -87,11 +89,61 @@ Game.Play.prototype = {
     spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     // muteKey = game.input.keyboard.addKey(Phaser.Keyboard.M);
 
+    this.emitter = this.game.add.emitter(0, 0, 100);
+    // this.emitter.makeParticles(this.playerbmd);
+    this.emitter.makeParticles(this.debris);
+    this.emitter.gravity = 500;
+    this.emitter.minParticleSpeed.setTo(-200, -200);
+    this.emitter.maxParticleSpeed.setTo(200, 200);
+
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
+    this.scoreText = this.game.add.text(Game.w - 120, 16, 'Score:  0', { font: "18px Helvetica", fill: "#ffffff" });
+    this.score = 0;
+  },
+  update: function() {
+
+    scrollPosition -= 6;
+    ground.tilePosition.x = scrollPosition;
+    background.tilePosition.x = scrollPosition * 0.1;
+
+    if (player.alive === true) {
+
+      this.game.physics.arcade.overlap(player, this.pillars, this.playerDead, null, this);
+      this.game.physics.arcade.collide(group, ground);
+      this.playerMovement();
+
+    }else {
+      if (this.game.input.activePointer.isDown){
+        this.pillars.forEach(function(p) {
+          p.alive = false;
+        });
+        this.game.state.start('Play');
+      }
+
+    }
+
+    // this.pillars.forEach(function(p) {
+    //   p.x = scrollPosition;
+    //   console.log(p.x);
+    // });  
+
+  },
+  playerDead: function() {
+    player.alive = false;
+    player.kill();
+    this.emitter.x = player.x;
+    this.emitter.y = player.y;
+    this.emitter.start(true, 1000, null, 128);
   },
   addPillars: function() {
-    var hole = Math.floor(Math.random() * 5) + 1;
+    if (player.alive === false) {
+      return;
+    }else {
+      this.scoreText.setText('Score:  '+ this.score);
+      this.score += 1;
+    }
+    var hole = Math.floor(Math.random() * 7) ;
      // Add the 6 pipes 
      for (var i = 0; i < 9; i++) {
        if (i !== hole && i !== hole + 1 && i !== hole + 2) { 
@@ -100,29 +152,31 @@ Game.Play.prototype = {
      }
   },
   addPillar: function(x,y, i) {
-    var p = this.add.sprite(x, y, this.playerbmd, 0);
-    p.checkWorldBounds = true;
-    p.outOfBoundsKill = true;
+
+    var p;
+    if (this.pillars.getFirstExists(false) === null) {
+      p = this.add.sprite(x, y, this.playerbmd, 0); 
+      p.checkWorldBounds = true;
+      p.outOfBoundsKill = true;
+      this.pillars.add(p);
+      console.log('create pillar');
+    }else {
+      p = this.pillars.getFirstExists(false);
+      p.reset(x, y);
+      console.log('rez pillar');
+    }
 
     if (i % 2) {
       p.tint = 0xffffff;
     }else {
       p.tint = 0xff0000;
     }
+
     this.game.physics.arcade.enable(p);
 
     p.body.velocity.x = -355; 
   },
-  update: function() {
 
-    this.game.physics.arcade.collide(group, ground);
-    this.playerMovement();
-
-    scrollPosition -= 6;
-    ground.tilePosition.x = scrollPosition;
-    background.tilePosition.x = scrollPosition * 0.1;
-
-  },
   playerMovement: function() {
     if (spaceKey.isDown && player.body.touching.down) {
       player.body.velocity.y = -600;
@@ -135,9 +189,9 @@ Game.Play.prototype = {
       }
     },this);
   },
-  render: function()
-  {
-      this.game.debug.text(this.game.time.fps || '--', 2, 14, '#00ff00');
-  },
+  // render: function()
+  // {
+  //     this.game.debug.text(this.game.time.fps || '--', 2, 14, '#00ff00');
+  // },
 
 };
