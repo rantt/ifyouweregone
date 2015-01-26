@@ -109,7 +109,8 @@ Game.Play.prototype = {
 
     if (player.alive === true) {
 
-      this.game.physics.arcade.overlap(player, this.pillars, this.playerDead, null, this);
+      // this.game.physics.arcade.overlap(player, this.pillars, this.hitPillar, null, this);
+      this.game.physics.arcade.collide(player, this.pillars, this.hitPillar, null, this);
       this.game.physics.arcade.collide(group, ground);
       this.playerMovement();
 
@@ -128,6 +129,13 @@ Game.Play.prototype = {
     //   console.log(p.x);
     // });  
 
+  },
+  hitPillar: function(plyr, pillar) {
+    console.log('ouch');
+    if (pillar.body.touching.left || pillar.body.touching.right) {
+      console.log('hit');
+      this.playerDead();
+    }
   },
   playerDead: function() {
     player.alive = false;
@@ -156,8 +164,11 @@ Game.Play.prototype = {
     var p;
     if (this.pillars.getFirstExists(false) === null) {
       p = this.add.sprite(x, y, this.playerbmd, 0); 
+      this.game.physics.arcade.enable(p);
       p.checkWorldBounds = true;
       p.outOfBoundsKill = true;
+      p.body.immovable = true;
+      p.body.drag = 0;
       this.pillars.add(p);
       console.log('create pillar');
     }else {
