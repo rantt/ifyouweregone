@@ -79,7 +79,8 @@ Game.Play.prototype = {
 
     this.pillars = this.game.add.group();
 
-    this.timer = this.game.time.events.loop(1500, this.addPillars, this);  
+    // this.timer = this.game.time.events.loop(1500, this.addPillars, this);  
+    this.timer = this.game.time.events.loop(1400, this.addPillars, this);  
 
     // // Music
     // this.music = this.game.add.sound('music');
