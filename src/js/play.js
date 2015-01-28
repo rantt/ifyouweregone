@@ -16,6 +16,7 @@ var group,
     player,
     ground,
     background,
+    shakeWorld = 0;
     scrollPosition = 0;
 
 Game.Play = function(game) {
@@ -90,7 +91,6 @@ Game.Play.prototype = {
     // muteKey = game.input.keyboard.addKey(Phaser.Keyboard.M);
 
     this.emitter = this.game.add.emitter(0, 0, 100);
-    // this.emitter.makeParticles(this.playerbmd);
     this.emitter.makeParticles(this.debris);
     this.emitter.gravity = 500;
     this.emitter.minParticleSpeed.setTo(-200, -200);
@@ -102,6 +102,15 @@ Game.Play.prototype = {
     this.score = 0;
   },
   update: function() {
+    if (shakeWorld > 0) {
+       var rand1 = this.game.rnd.integerInRange(-20,20);
+       var rand2 = this.game.rnd.integerInRange(-20,20);
+        this.game.world.setBounds(rand1, rand2, this.game.width + rand1, this.game.height + rand2);
+        shakeWorld--;
+        if (shakeWorld == 0) {
+            this.game.world.setBounds(0, 0, this.game.width,game.height); // normalize after shake?
+        }
+    }
 
     scrollPosition -= 6;
     ground.tilePosition.x = scrollPosition;
@@ -132,10 +141,12 @@ Game.Play.prototype = {
   },
   hitPillar: function(plyr, pillar) {
     console.log('ouch');
-    if (pillar.body.touching.left || pillar.body.touching.right) {
-      console.log('hit');
       this.playerDead();
-    }
+      shakeWorld = 80;
+    // if (pillar.body.touching.left || pillar.body.touching.right) {
+    //   console.log('hit');
+    //   this.playerDead();
+    // }
   },
   playerDead: function() {
     player.alive = false;
@@ -168,7 +179,6 @@ Game.Play.prototype = {
       p.checkWorldBounds = true;
       p.outOfBoundsKill = true;
       p.body.immovable = true;
-      p.body.drag = 0;
       this.pillars.add(p);
       console.log('create pillar');
     }else {
