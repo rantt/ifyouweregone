@@ -29,6 +29,10 @@ Game.Play.prototype = {
 		this.game.stage.backgroundColor = '#000';
 
 
+    var screenShake = this.game.plugins.add(Phaser.Plugin.ScreenShake);
+    this.game.plugins.ScreenShake = screenShake;
+
+
     //Draw a white square
     this.playerbmd = this.game.add.bitmapData(32, 32);
     this.playerbmd.ctx.strokeStyle = '#000';
@@ -102,15 +106,6 @@ Game.Play.prototype = {
     this.score = 0;
   },
   update: function() {
-    if (shakeWorld > 0) {
-       var rand1 = this.game.rnd.integerInRange(-20,20);
-       var rand2 = this.game.rnd.integerInRange(-20,20);
-        this.game.world.setBounds(rand1, rand2, this.game.width + rand1, this.game.height + rand2);
-        shakeWorld--;
-        if (shakeWorld == 0) {
-            this.game.world.setBounds(0, 0, this.game.width,game.height); // normalize after shake?
-        }
-    }
 
     scrollPosition -= 6;
     ground.tilePosition.x = scrollPosition;
@@ -130,25 +125,21 @@ Game.Play.prototype = {
         });
         this.game.state.start('Play');
       }
-
     }
-
-    // this.pillars.forEach(function(p) {
-    //   p.x = scrollPosition;
-    //   console.log(p.x);
-    // });  
 
   },
   hitPillar: function(plyr, pillar) {
     console.log('ouch');
       this.playerDead();
-      shakeWorld = 80;
+      shakeWorld = 40;
     // if (pillar.body.touching.left || pillar.body.touching.right) {
     //   console.log('hit');
     //   this.playerDead();
     // }
   },
   playerDead: function() {
+    this.game.plugins.ScreenShake.start(40);
+
     player.alive = false;
     player.kill();
     this.emitter.x = player.x;
