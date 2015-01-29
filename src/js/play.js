@@ -191,7 +191,7 @@ Game.Play.prototype = {
   },
 
   playerMovement: function() {
-    if (spaceKey.isDown && player.body.touching.down) {
+    if ((spaceKey.isDown || this.game.input.activePointer.isDown) && player.body.touching.down) {
       player.body.velocity.y = -600;
         this.game.add.tween(player).to({angle: player.angle - 270}, 800, Phaser.Easing.Linear.None).start();
     }
@@ -201,6 +201,13 @@ Game.Play.prototype = {
         player.body.velocity.y = -200;
       }
     },this);
+
+    this.game.input.onUp.add(function() {
+      if (player.body.velocity.y < -200) {
+        player.body.velocity.y = -200;
+      }
+    },this);
+
   },
   // render: function()
   // {
