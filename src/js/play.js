@@ -16,6 +16,7 @@ var group,
     player,
     ground,
     background,
+    level = 1,
     shakeWorld = 0;
     scrollPosition = 0;
 
@@ -27,6 +28,8 @@ Game.Play.prototype = {
   create: function() {
     this.game.world.setBounds(0, 0 ,Game.w ,Game.h);
 		this.game.stage.backgroundColor = '#000';
+
+    this.startTime = this.game.time.time;
 
 
     var screenShake = this.game.plugins.add(Phaser.Plugin.ScreenShake);
@@ -100,21 +103,70 @@ Game.Play.prototype = {
     this.emitter.gravity = 500;
     this.emitter.minParticleSpeed.setTo(-200, -200);
     this.emitter.maxParticleSpeed.setTo(200, 200);
-
+  
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
-    this.scoreText = this.game.add.text(Game.w - 120, 16, 'Score:  0', { font: "18px Helvetica", fill: "#ffffff" });
+
+    this.runningTimeText = this.game.add.bitmapText(20, 20, 'minecraftia','00:00',32);
+
+    this.scoreText = this.game.add.bitmapText(Game.w - 230 , 16, 'minecraftia','Score:  0',32);
     this.score = 0;
+
   },
+  showRunningTime: function() {
+   
+    this.runningTime = this.game.time.time - this.startTime;
+    
+    minutes = Math.floor(this.runningTime / 60000) % 60; 
+    seconds = Math.floor(this.runningTime / 1000) % 60;
+    milliseconds = Math.floor(this.runningTime) % 100;
+
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+
+    if (seconds < 10) {
+      seconds = '0' + seconds;
+    }
+
+    if (milliseconds < 10) {
+      milliseconds = '0' + milliseconds;
+    }
+
+    if (minutes !== '00') {
+      this.runningTimeText.setText(minutes+':'+seconds+':'+milliseconds);
+    }else {
+      this.runningTimeText.setText(seconds+':'+milliseconds);
+    }
+
+    Game.bestTime = this.runningTime;
+ },
+
   update: function() {
 
-    scrollPosition -= 6;
-    ground.tilePosition.x = scrollPosition;
-    background.tilePosition.x = scrollPosition * 0.1;
+    if (level === 1) {
+      scrollPosition -= 6;
+      ground.tilePosition.x = scrollPosition;
+      background.tilePosition.x = scrollPosition * 0.1;
+    }else if (level === 2) {
+      scrollPosition -= 18;
+      background.tilePosition.y = scrollPosition * 0.1;
+      ground.destroy();
+      player.x = game.width / 2;
+      player.y = game.height / 2;
+      // ground.tilePosition.y = scrollPosition;
+      this.game.time.events.remove(this.timer);
+      this.pillars.destroy();
+    }
+
+    if (this.score > 2 && level < 2) {
+      console.log('blah');
+      level = 2;
+    }
 
     if (player.alive === true) {
 
-      // this.game.physics.arcade.overlap(player, this.pillars, this.hitPillar, null, this);
+      this.showRunningTime();
       this.game.physics.arcade.collide(player, this.pillars, this.hitPillar, null, this);
       this.game.physics.arcade.collide(group, ground);
       this.playerMovement();
@@ -124,6 +176,7 @@ Game.Play.prototype = {
         this.pillars.forEach(function(p) {
           p.alive = false;
         });
+        this.startTime = this.game.time.time;
         this.game.state.start('Play');
       }
     }
@@ -158,11 +211,11 @@ Game.Play.prototype = {
      // Add the 6 pipes 
      for (var i = 0; i < 9; i++) {
        if (i !== hole && i !== hole + 1 && i !== hole + 2) { 
-         this.addPillar(800, i * 32 + 280, i);   
+         this.addPillar(800, i * 32 + 280);   
        }
      }
   },
-  addPillar: function(x,y, i) {
+  addPillar: function(x,y) {
 
     var p;
     if (this.pillars.getFirstExists(false) === null) {
@@ -179,11 +232,7 @@ Game.Play.prototype = {
       console.log('rez pillar');
     }
 
-    if (i % 2) {
-      p.tint = 0xffffff;
-    }else {
-      p.tint = 0xff0000;
-    }
+    p.tint = 0xff0000;
 
     this.game.physics.arcade.enable(p);
 
@@ -191,9 +240,11 @@ Game.Play.prototype = {
   },
 
   playerMovement: function() {
+    
     if ((spaceKey.isDown || this.game.input.activePointer.isDown) && player.body.touching.down) {
-      player.body.velocity.y = -600;
+        player.body.velocity.y = -600;
         this.game.add.tween(player).to({angle: player.angle - 270}, 800, Phaser.Easing.Linear.None).start();
+
     }
 
     spaceKey.onUp.add(function() {
