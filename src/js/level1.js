@@ -117,7 +117,7 @@ Game.Level1.prototype = {
 
   update: function() {
 
-      scrollPosition -= 6;
+    scrollPosition -= 6;
     if (Game.score < 4) {
 
       // scrollPosition -= 6;

@@ -93,6 +93,7 @@ Game.Level2.prototype = {
     Game.score = 11;
     this.runningTimeText = this.game.add.bitmapText(36, 20, 'minecraftia','00:00',32);
     this.scoreText = this.game.add.bitmapText(Game.w - 264 , 16, 'minecraftia','Score:  '+Game.score, 32);
+    this.playAgainText = this.game.add.bitmapText(this.game.world.centerX - 300, Game.h + 100, 'minecraftia','test',48);
 
   },
   showRunningTime: function() {
@@ -139,6 +140,12 @@ Game.Level2.prototype = {
       this.playerMovement();
 
     }else {
+      this.playAgainText.setText('Click to Try Again?');
+
+      this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
+        this.game.add.tween(this.playAgainText).to({y: this.game.world.centerY - 100}, 255, Phaser.Easing.Linear.None).start();
+      }, this);
+
       if (this.game.input.activePointer.isDown){
         this.pillars.forEach(function(p) {
           p.alive = false;
