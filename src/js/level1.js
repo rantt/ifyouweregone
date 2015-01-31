@@ -16,6 +16,7 @@ var group,
     player,
     ground,
     background,
+    cutscene = false,
     scrollPosition = 0;
 
 Game.Level1 = function(game) {
@@ -116,33 +117,56 @@ Game.Level1.prototype = {
 
   update: function() {
 
-    if (Game.score > 10) {
-      this.game.state.start('Level2');
-    }
+      scrollPosition -= 6;
+    if (Game.score < 4) {
 
-    scrollPosition -= 6;
-    border.tilePosition.x = scrollPosition;
-    background.tilePosition.x = scrollPosition * 0.1;
+      // scrollPosition -= 6;
+      border.tilePosition.x = scrollPosition;
+      background.tilePosition.x = scrollPosition * 0.1;
 
-    if (player.alive === true) {
-      this.showRunningTime();
-      this.game.physics.arcade.collide(player, this.pillars, this.hitPillar, null, this);
-      this.game.physics.arcade.collide(border, player);
-      this.playerMovement();
-    }else {
+      if (player.alive === true) {
+        this.showRunningTime();
+        this.game.physics.arcade.collide(player, this.pillars, this.hitPillar, null, this);
+        this.game.physics.arcade.collide(border, player);
+        this.playerMovement();
+      }else {
 
         this.playAgainText.setText('Click to Try Again?');
-        
-        this.game.time.events.loop(1500, function() {
-          this.game.add.tween(this.playAgainText).to({x: this.game.world.centerX-300}, 355, Phaser.Easing.Linear.None).start();
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
+            this.game.add.tween(this.playAgainText).to({x: this.game.world.centerX-300}, 355, Phaser.Easing.Linear.None).start();
         }, this);
-      if (this.game.input.activePointer.isDown){
-        this.pillars.forEach(function(p) {
-          p.alive = false;
-        });
-        this.startTime = this.game.time.time;
-        this.game.state.start('Level1');
+          
+        if (this.game.input.activePointer.isDown){
+          this.pillars.forEach(function(p) {
+            p.alive = false;
+          });
+          this.startTime = this.game.time.time;
+          this.game.state.start('Level1');
+        }
       }
+
+     
+    }else {
+      background.tilePosition.y = scrollPosition * 0.3;
+      if (cutscene === false) {
+        cutscene = true;
+        player.body.velocity.y = 0;
+        player.body.allowGravity = false;
+        // var t = this.game.add.tween(player).to({x: this.game.world.centerX, y : this.game.world.centerY}, 2000, Phaser.Easing.Linear.None, true);
+        var p = this.game.add.tween(player).to({x: this.game.world.centerX, y : this.game.world.centerY - 100}, 2000, Phaser.Easing.Linear.None, true);
+
+          this.pillars.forEach(function(p) {
+            p.body.velocity.x = 0;
+            p.body.velocity.y = -500;
+          });
+
+
+        p.onComplete.add(function () {
+          this.game.state.start('Level2');
+        }, this);
+      }
+      
     }
 
   },
@@ -150,10 +174,6 @@ Game.Level1.prototype = {
     console.log('ouch');
       this.playerDead();
       shakeWorld = 40;
-    // if (pillar.body.touching.left || pillar.body.touching.right) {
-    //   console.log('hit');
-    //   this.playerDead();
-    // }
   },
   playerDead: function() {
     this.game.plugins.ScreenShake.start(40);
@@ -200,7 +220,12 @@ Game.Level1.prototype = {
 
     this.game.physics.arcade.enable(p);
 
-    p.body.velocity.x = -355; 
+    if (Game.score < 4) {
+      p.body.velocity.x = -355; 
+    }else {
+      p.body.velocity.x = 0;
+      p.body.velocity.y = -500;
+    }
   },
 
   playerMovement: function() {

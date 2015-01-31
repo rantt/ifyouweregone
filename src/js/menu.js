@@ -21,8 +21,8 @@ Game.Menu.prototype =  {
     update: function() {
       //Click to Start
       if (this.game.input.activePointer.isDown){
-        // this.game.state.start('Level1');
-        this.game.state.start('Level2');
+        this.game.state.start('Level1');
+        // this.game.state.start('Level2');
       }
     }
 };
