@@ -16,65 +16,38 @@ var group,
     player,
     ground,
     background,
-    level = 1,
-    shakeWorld = 0;
     scrollPosition = 0;
 
-Game.Play = function(game) {
+Game.Level1 = function(game) {
   this.game = game;
 };
 
-Game.Play.prototype = {
+Game.Level1.prototype = {
   create: function() {
     this.game.world.setBounds(0, 0 ,Game.w ,Game.h);
 		this.game.stage.backgroundColor = '#000';
 
     this.startTime = this.game.time.time;
 
-
     var screenShake = this.game.plugins.add(Phaser.Plugin.ScreenShake);
     this.game.plugins.ScreenShake = screenShake;
-
-
-    //Draw a white square
-    this.playerbmd = this.game.add.bitmapData(32, 32);
-    this.playerbmd.ctx.strokeStyle = '#000';
-    this.playerbmd.ctx.rect(0, 0, 32, 32);
-    this.playerbmd.ctx.fillStyle = '#fff';
-    this.playerbmd.ctx.fill();
-
-    this.debris = this.game.add.bitmapData(8, 8);
-    this.debris.ctx.strokeStyle = '#000';
-    this.debris.ctx.rect(0, 0, 32, 32);
-    this.debris.ctx.fillStyle = '#fff';
-    this.debris.ctx.fill();
-
-
-    //Draw a black and white checker board
-    var groundbmd = this.game.add.bitmapData(32, 32);
-        groundbmd.ctx.rect(0, 0, 32, 32);
-        groundbmd.ctx.fillStyle = '#fff'; //set a white background for the tile
-        groundbmd.ctx.fill();
-        groundbmd.ctx.beginPath();
-        groundbmd.ctx.rect(0, 0, 16, 16);  
-        groundbmd.ctx.rect(16, 16, 16, 16);
-        // groundbmd.ctx.fillStyle = '#bbb';
-        groundbmd.ctx.fillStyle = '#ff0000';
-        groundbmd.ctx.fill();
-
-    background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, groundbmd);
+    
+    background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, borderbmd);
     background.tileScale.set(4);
     background.tint = 0x444444;
 
-    group = this.game.add.group();
-    group.enableBody = true;
-    ground = this.game.add.tileSprite(-512, this.game.height - 32, this.game.width + 512, 32, groundbmd);
+    // group = this.game.add.group();
+    // group.enableBody = true;
+    border = this.game.add.tileSprite(-512, this.game.height - 32, this.game.width + 512, 32, borderbmd);
+    border.enableBody = true;
 
-    this.game.physics.arcade.enable(ground);
-    ground.body.immovable = true;
-    ground.body.allowGravity = false;
+    this.game.physics.arcade.enable(border);
+    border.body.immovable = true;
+    border.body.allowGravity = false;
 
-    player = this.game.add.sprite(128, this.game.world.centerY, this.playerbmd, 0, group);
+    // player = this.game.add.sprite(128, this.game.world.centerY, playerbmd, 0, group);
+    player = this.game.add.sprite(128, this.game.world.centerY, playerbmd);
+    player.enableBody = true;
     this.game.physics.arcade.enable(player);
     player.anchor.set(0.5);
     player.tint = 0xffffff;
@@ -82,8 +55,7 @@ Game.Play.prototype = {
 
     this.pillars = this.game.add.group();
 
-    // this.timer = this.game.time.events.loop(1500, this.addPillars, this);  
-    this.timer = this.game.time.events.loop(1400, this.addPillars, this);  
+    this.timer = this.game.time.events.loop(1500, this.addPillars, this);  
 
     // // Music
     // this.music = this.game.add.sound('music');
@@ -99,18 +71,18 @@ Game.Play.prototype = {
     // muteKey = game.input.keyboard.addKey(Phaser.Keyboard.M);
 
     this.emitter = this.game.add.emitter(0, 0, 100);
-    this.emitter.makeParticles(this.debris);
+    this.emitter.makeParticles(debris);
     this.emitter.gravity = 500;
     this.emitter.minParticleSpeed.setTo(-200, -200);
     this.emitter.maxParticleSpeed.setTo(200, 200);
   
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
+    Game.score = 0;
 
     this.runningTimeText = this.game.add.bitmapText(20, 20, 'minecraftia','00:00',32);
-
     this.scoreText = this.game.add.bitmapText(Game.w - 230 , 16, 'minecraftia','Score:  0',32);
-    this.score = 0;
+    this.playAgainText = this.game.add.bitmapText(Game.w + 100, this.game.world.centerY, 'minecraftia','test',48);
 
   },
   showRunningTime: function() {
@@ -144,40 +116,32 @@ Game.Play.prototype = {
 
   update: function() {
 
-    if (level === 1) {
-      scrollPosition -= 6;
-      ground.tilePosition.x = scrollPosition;
-      background.tilePosition.x = scrollPosition * 0.1;
-    }else if (level === 2) {
-      scrollPosition -= 18;
-      background.tilePosition.y = scrollPosition * 0.1;
-      ground.destroy();
-      player.x = game.width / 2;
-      player.y = game.height / 2;
-      // ground.tilePosition.y = scrollPosition;
-      this.game.time.events.remove(this.timer);
-      this.pillars.destroy();
+    if (Game.score > 10) {
+      this.game.state.start('Level2');
     }
 
-    if (this.score > 2 && level < 2) {
-      console.log('blah');
-      level = 2;
-    }
+    scrollPosition -= 6;
+    border.tilePosition.x = scrollPosition;
+    background.tilePosition.x = scrollPosition * 0.1;
 
     if (player.alive === true) {
-
       this.showRunningTime();
       this.game.physics.arcade.collide(player, this.pillars, this.hitPillar, null, this);
-      this.game.physics.arcade.collide(group, ground);
+      this.game.physics.arcade.collide(border, player);
       this.playerMovement();
-
     }else {
+
+        this.playAgainText.setText('Click to Try Again?');
+        
+        this.game.time.events.loop(1500, function() {
+          this.game.add.tween(this.playAgainText).to({x: this.game.world.centerX-300}, 355, Phaser.Easing.Linear.None).start();
+        }, this);
       if (this.game.input.activePointer.isDown){
         this.pillars.forEach(function(p) {
           p.alive = false;
         });
         this.startTime = this.game.time.time;
-        this.game.state.start('Play');
+        this.game.state.start('Level1');
       }
     }
 
@@ -204,8 +168,8 @@ Game.Play.prototype = {
     if (player.alive === false) {
       return;
     }else {
-      this.scoreText.setText('Score:  '+ this.score);
-      this.score += 1;
+      this.scoreText.setText('Score:  '+ Game.score);
+      Game.score += 1;
     }
     var hole = Math.floor(Math.random() * 7) ;
      // Add the 6 pipes 
@@ -219,7 +183,7 @@ Game.Play.prototype = {
 
     var p;
     if (this.pillars.getFirstExists(false) === null) {
-      p = this.add.sprite(x, y, this.playerbmd, 0); 
+      p = this.add.sprite(x, y, playerbmd, 0); 
       this.game.physics.arcade.enable(p);
       p.checkWorldBounds = true;
       p.outOfBoundsKill = true;
