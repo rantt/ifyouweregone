@@ -28,18 +28,10 @@ Game.Level1.prototype = {
     this.game.world.setBounds(0, 0 ,Game.w ,Game.h);
 		this.game.stage.backgroundColor = '#000';
 
-    // this.startTime = this.game.time.time;
-    // Game.startTime = this.game.time.time;
-
-    var screenShake = this.game.plugins.add(Phaser.Plugin.ScreenShake);
-    this.game.plugins.ScreenShake = screenShake;
-    
     background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, borderbmd);
     background.tileScale.set(4);
     background.tint = 0x444444;
 
-    // group = this.game.add.group();
-    // group.enableBody = true;
     border = this.game.add.tileSprite(-512, this.game.height - 32, this.game.width + 512, 32, borderbmd);
     border.enableBody = true;
 
