@@ -150,6 +150,7 @@ Game.Level2.prototype = {
 
         p.onComplete.add(function () {
           this.game.plugins.ScreenShake.start(40);
+          this.deadSnd.play();
           this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
             this.game.state.start('Level3');
           },this);

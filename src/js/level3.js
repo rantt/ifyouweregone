@@ -221,7 +221,7 @@ Game.Level3.prototype = {
     platform.body.velocity.x *= -1;
   },
   twitter: function() {
-    window.open('http://twitter.com/share?text=I+died+'+Game.deaths+'+times+to+save+you.+at&via=rantt_&url=http://www.divideby5.com/games/ifyouweregone/', '_blank');
+    window.open('http://twitter.com/share?text=I+died+'+Game.deaths+'+times+to+save+you.+at&via=rantt_&url=http://www.divideby5.com/games/ifyouweregone/&hashtags=ifyouwergone,1GAM', '_blank');
   },
 
   playerDead: function() {
