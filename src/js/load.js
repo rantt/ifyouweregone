@@ -76,7 +76,7 @@ Game.Load.prototype = {
     borderbmd.ctx.fillStyle = '#ff0000';
     borderbmd.ctx.fill();
 
-
+    this.game.load.image('twitter','assets/images/twitter.png');
 
     // Music Track
     // this.game.load.audio('music','soundtrack.mp3');

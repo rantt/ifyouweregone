@@ -117,13 +117,13 @@ Game.Level2.prototype = {
         this.playerMovement();
 
       }else {
-        this.playAgainText.setText('Click to Try Again?');
+        this.playAgainText.setText('Try Again?');
 
         this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
           this.game.add.tween(this.playAgainText).to({y: this.game.world.centerY - 100}, 255, Phaser.Easing.Linear.None).start();
         }, this);
 
-        if (this.game.input.activePointer.isDown){
+        if (this.game.input.activePointer.isDown || wKey.isDown || spaceKey.isDown || this.cursors.up.isDown){
           this.pillars.forEach(function(p) {
             p.alive = false;
           });
@@ -217,11 +217,11 @@ Game.Level2.prototype = {
 
   playerMovement: function() {
 
-    if (aKey.isDown) {
+    if (aKey.isDown || this.cursors.left.isDown) {
       player.body.velocity.x -= 20;
     }
     
-    if (dKey.isDown) {
+    if (dKey.isDown || this.cursors.right.isDown) {
       player.body.velocity.x += 20;
     }
 

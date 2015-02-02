@@ -18,8 +18,10 @@ Game.Menu.prototype =  {
         border.body.allowGravity = false;
         border.tint = 0x444444;
 
-        var title = this.game.add.bitmapText(this.game.world.centerX - 300, this.game.world.centerY, 'minecraftia',"If you were gone...",48);
+        var title = this.game.add.bitmapText(this.game.world.centerX - 300, this.game.world.centerY - 100, 'minecraftia',"If you were gone...",48);
         title.tint = 0xf660ab;
+
+        var instructions = this.game.add.bitmapText(this.game.world.centerX - 300, this.game.world.centerY + 90, 'minecraftia',"Levels\nThe Run - w/up/space to jump.\nThe Fall - a/<- left and d/-> right\nThe Climb - a/<- left, d/-> right.\nw/up/space to jump.",24);
 
     },
     update: function() {
@@ -29,10 +31,9 @@ Game.Menu.prototype =  {
       background.tilePosition.x = scrollPosition * 0.1;
       //Click to Start
       if (this.game.input.activePointer.isDown){
-        // this.tween.stop();
-        // this.game.state.start('Level1');
+        this.game.state.start('Level1');
         // this.game.state.start('Level2');
-        this.game.state.start('Level3');
+        // this.game.state.start('Level3');
       }
     }
 };

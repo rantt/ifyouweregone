@@ -65,7 +65,6 @@ Game.Level3.prototype = {
 
     deathwave = this.game.add.tileSprite(-512, this.game.world.height - 32, this.game.width + 512, 32, playerbmd);
     deathwave.enableBody = true;
-    deathwave.enableyBody = true;
     this.game.physics.arcade.enable(deathwave);
     deathwave.body.immovable = true;
     deathwave.body.allowGravity = false;
@@ -191,7 +190,8 @@ Game.Level3.prototype = {
           this.game.add.tween(this.playAgainText).to({y: 200}, 255, Phaser.Easing.Linear.None).start();
         }, this);
 
-        if (this.game.input.activePointer.isDown){
+          
+        if (this.game.input.activePointer.isDown || wKey.isDown || spaceKey.isDown || this.cursors.up.isDown){
           this.game.state.start('Level3');
         }
       }
@@ -206,11 +206,19 @@ Game.Level3.prototype = {
     this.youWinText.tint = 0x00bfff;
     win = true;
 
+    this.twitterButton = this.game.add.button(450, 275,'twitter', this.twitter, this);
+    this.twitterButton.fixedToCamera = true;
+
+    deathwave.body.velocity.y = 0;
 
   },
   bounce: function(platform) {
     platform.body.velocity.x *= -1;
   },
+  twitter: function() {
+    window.open('http://twitter.com/share?text=I+died+'+Game.deaths+'+times+to+save+you.+at&via=rantt_&url=http://www.divideby5.com/games/ifyouweregone/', '_blank');
+  },
+
   playerDead: function() {
     this.game.plugins.ScreenShake.start(40);
 
@@ -229,11 +237,11 @@ Game.Level3.prototype = {
 
     player.body.velocity.x = 0;
 
-    if (aKey.isDown) {
+    if (aKey.isDown || this.cursors.left.isDown) {
       player.body.velocity.x = -300;
       facing = 'left';
     }
-    if (dKey.isDown) {
+    if (dKey.isDown || this.cursors.right.isDown) {
       player.body.velocity.x = 300;
       facing = 'right';
     }
@@ -242,7 +250,7 @@ Game.Level3.prototype = {
     //   player.body.velocity.y -= 30;
     // }
 
-    if ((spaceKey.isDown || this.game.input.activePointer.isDown) && player.body.touching.down) {
+    if ((spaceKey.isDown || this.game.input.activePointer.isDown || this.cursors.up.isDown || wKey.isDown) && player.body.touching.down) {
         player.body.velocity.y = -700;
         if ( facing === 'left') {
           this.game.add.tween(player).to({angle: player.angle + 180}, 600, Phaser.Easing.Linear.None).start();
@@ -251,17 +259,29 @@ Game.Level3.prototype = {
         }
 
     }
+
     spaceKey.onUp.add(function() {
-      if (player.body.velocity.y < -200) {
-        player.body.velocity.y = -200;
-      }
+      lowJump();
     },this);
 
     this.game.input.onUp.add(function() {
+      lowJump();
+    },this);
+
+    wKey.onUp.add(function() {
+      lowJump();
+    },this);
+
+    this.cursors.up.onUp.add(function() {
+      lowJump();
+    },this);
+
+    function lowJump() {
       if (player.body.velocity.y < -200) {
         player.body.velocity.y = -200;
       }
-    },this);
+    }
+
 
   },
 

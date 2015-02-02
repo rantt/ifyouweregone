@@ -103,13 +103,13 @@ Game.Level1.prototype = {
         this.playerMovement();
       }else {
 
-        this.playAgainText.setText('Click to Try Again?');
+        this.playAgainText.setText('Try Again?');
 
         this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
             this.game.add.tween(this.playAgainText).to({x: this.game.world.centerX-300}, 355, Phaser.Easing.Linear.None).start();
         }, this);
           
-        if (this.game.input.activePointer.isDown){
+        if (this.game.input.activePointer.isDown || wKey.isDown || spaceKey.isDown || this.cursors.up.isDown){
           this.pillars.forEach(function(p) {
             p.alive = false;
           });
@@ -200,23 +200,34 @@ Game.Level1.prototype = {
 
   playerMovement: function() {
     
-    if ((spaceKey.isDown || this.game.input.activePointer.isDown) && player.body.touching.down) {
+    if ((spaceKey.isDown || this.game.input.activePointer.isDown || this.cursors.up.isDown || wKey.isDown) && player.body.touching.down) {
         player.body.velocity.y = -600;
         this.game.add.tween(player).to({angle: player.angle - 270}, 800, Phaser.Easing.Linear.None).start();
 
     }
 
     spaceKey.onUp.add(function() {
-      if (player.body.velocity.y < -200) {
-        player.body.velocity.y = -200;
-      }
+      lowJump();
     },this);
 
     this.game.input.onUp.add(function() {
+      lowJump();
+    },this);
+
+    wKey.onUp.add(function() {
+      lowJump();
+    },this);
+
+    this.cursors.up.onUp.add(function() {
+      lowJump();
+    },this);
+
+    function lowJump() {
       if (player.body.velocity.y < -200) {
         player.body.velocity.y = -200;
       }
-    },this);
+    }
+
 
   },
 
