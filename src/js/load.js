@@ -8,7 +8,8 @@ var Game = {
 };
 
 
-var playerbmd,
+var player,
+    playerbmd,
     debris,
     borderbmd;
 
@@ -50,20 +51,23 @@ Game.Load.prototype = {
   	loadingText.anchor.setTo(0.5, 0.5);
   	var preloading = this.game.add.sprite(Game.w/2-64, Game.h/2+50, 'loading');
   	this.game.load.setPreloadSprite(preloading);
-    
-    //Draw a white square
-    playerbmd = this.game.add.bitmapData(32, 32);
-    playerbmd.ctx.strokeStyle = '#000';
-    playerbmd.ctx.rect(0, 0, 32, 32);
-    playerbmd.ctx.fillStyle = '#fff';
-    playerbmd.ctx.fill();
 
-    debris = this.game.add.bitmapData(8, 8);
-    debris.ctx.strokeStyle = '#000';
-    debris.ctx.rect(0, 0, 32, 32);
-    // debris.ctx.fillStyle = '#fff';
-    debris.ctx.fillStyle = '#f660ab';
-    debris.ctx.fill();
+    player = new Player(this.game);
+    player.preload(); 
+    
+    // //Draw a white square
+    // playerbmd = this.game.add.bitmapData(32, 32);
+    // playerbmd.ctx.strokeStyle = '#000';
+    // playerbmd.ctx.rect(0, 0, 32, 32);
+    // playerbmd.ctx.fillStyle = '#fff';
+    // playerbmd.ctx.fill();
+    //
+    // debris = this.game.add.bitmapData(8, 8);
+    // debris.ctx.strokeStyle = '#000';
+    // debris.ctx.rect(0, 0, 32, 32);
+    // // debris.ctx.fillStyle = '#fff';
+    // debris.ctx.fillStyle = '#f660ab';
+    // debris.ctx.fill();
 
     //Draw a black and white checker board
     borderbmd = this.game.add.bitmapData(32, 32);
