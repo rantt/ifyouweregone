@@ -58,10 +58,18 @@ Game.Level1.prototype = {
 
     this.timer = this.game.time.events.loop(1500, this.addPillars, this);  
 
-    // // Music
-    // this.music = this.game.add.sound('music');
-    // this.music.volume = 0.5;
-    // this.music.play('',0,1,true);
+    // Music
+    this.music = this.game.add.sound('music');
+    this.music.volume = 0.5;
+    this.music.play('',0,1,true);
+
+    //Add SFX
+    this.deadSnd = this.game.add.sound('dead');
+    this.deadSnd.volume = 0.5;
+
+    this.jumpSnd = this.game.add.sound('jump');
+    this.jumpSnd.volume = 0.5;
+
 
     //Setup WASD and extra keys
     wKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
@@ -113,6 +121,7 @@ Game.Level1.prototype = {
           this.pillars.forEach(function(p) {
             p.alive = false;
           });
+          this.music.stop();
           this.game.state.start('Level1');
         }
       }
@@ -146,6 +155,8 @@ Game.Level1.prototype = {
   },
   playerDead: function() {
     this.game.plugins.ScreenShake.start(40);
+    this.deadSnd.play();
+
     Game.deaths += 1;
     this.deathText.setText('Deaths: ' + Game.deaths);
 
@@ -200,6 +211,7 @@ Game.Level1.prototype = {
   playerMovement: function() {
     
     if ((spaceKey.isDown || this.game.input.activePointer.isDown || this.cursors.up.isDown || wKey.isDown) && player.body.touching.down) {
+        this.jumpSnd.play();
         player.body.velocity.y = -600;
         this.game.add.tween(player).to({angle: player.angle - 270}, 800, Phaser.Easing.Linear.None).start();
 

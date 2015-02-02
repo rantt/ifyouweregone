@@ -98,6 +98,10 @@ Game.Level2.prototype = {
     this.messageText.tint = 0xf660ab;
     this.game.add.tween(this.messageText).to({alpha: 0}, 1800).start();
 
+    //Add SFX
+    this.deadSnd = this.game.add.sound('dead');
+    this.deadSnd.volume = 0.5;
+    
   },
 
   update: function() {
@@ -163,6 +167,7 @@ Game.Level2.prototype = {
   },
   playerDead: function() {
     this.game.plugins.ScreenShake.start(40);
+    this.deadSnd.play();
     Game.deaths += 1;
     this.deathText.setText('Deaths: ' + Game.deaths);
 
