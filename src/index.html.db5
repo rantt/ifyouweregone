@@ -62,6 +62,8 @@
 
 <h2>If you were gone...</h2>
 
+<div id="game"></div>
+
 <div class="row">
 	<div class="container">
 		<div align="center">
@@ -76,13 +78,9 @@
 
 
 
-<div id="game"></div>
 
 <br />
-<div align="center">
-	<p>Music - link to music</p>
-	Source code available at [github link]
-</div>
+
 </body>
 <div class="container">
  <div id="disqus_thread"></div>
