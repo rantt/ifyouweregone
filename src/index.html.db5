@@ -60,7 +60,21 @@
 
 
 
-<h2>Game Title</h2>
+<h2>If you were gone...</h2>
+
+<div class="row">
+	<div class="container">
+		<div align="center">
+      Music
+      <ul>
+        <li><a href= 'http://opengameart.org/content/in-the-name-of-all-nes-version'>In The Name of All (NES Version)</a> by Snabisch</li>
+      </ul>
+			Source code available at <a href="https://github.com/rantt/ifyouweregone">https://github.com/rantt/ifyouweregone</a>
+		</div>
+	</div>
+</div>
+
+
 
 <div id="game"></div>
 
