@@ -1,12 +1,12 @@
 var Game = {
   w: 800,
   h: 600,
-  score: 0
+  score: 0,
+  deaths: 0,
+  startTime: 0,
+  runningTime: 0,
 };
 
-
-// var w = 800;
-// var h = 600;
 
 var playerbmd,
     debris,
@@ -61,7 +61,8 @@ Game.Load.prototype = {
     debris = this.game.add.bitmapData(8, 8);
     debris.ctx.strokeStyle = '#000';
     debris.ctx.rect(0, 0, 32, 32);
-    debris.ctx.fillStyle = '#fff';
+    // debris.ctx.fillStyle = '#fff';
+    debris.ctx.fillStyle = '#f660ab';
     debris.ctx.fill();
 
     //Draw a black and white checker board

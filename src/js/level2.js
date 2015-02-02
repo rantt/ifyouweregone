@@ -26,12 +26,7 @@ Game.Level2.prototype = {
   create: function() {
     this.game.world.setBounds(0, 0 ,Game.w ,Game.h);
 		this.game.stage.backgroundColor = '#000';
-
-    this.startTime = this.game.time.time;
-
-
-    // var screenShake = this.game.plugins.add(Phaser.Plugin.ScreenShake);
-    // this.game.plugins.ScreenShake = screenShake;
+    cutscene = false,
 
     background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, borderbmd);
     background.tileScale.set(4);
@@ -51,18 +46,23 @@ Game.Level2.prototype = {
     this.game.physics.arcade.enable(this.borderRight);
     this.borderRight.body.immovable = true;
     this.borderRight.body.allowGravity = false;
+
+    border = this.game.add.tileSprite(-512, this.game.height + 32, this.game.width + 512, 32, playerbmd, 0 , group);
+    border.enableBody = true;
+    border.enableyBody = true;
+    this.game.physics.arcade.enable(border);
+    border.body.immovable = true;
+    border.body.allowGravity = false;
+    border.tint = 0x000
+
     
     player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY - 100, playerbmd, 0, group);
     player.enableyBody = true;
     this.game.physics.arcade.enable(player);
     player.anchor.set(0.5);
-    player.tint = 0xffffff;
+    player.tint = 0xf660ab;
     player.body.allowGravity = false;
-    // player.body.gravity.y = 750;
-
-
-    // this.game.add.tween(player).to({x: Game.width/2, y: Game.height/2}, 800, Phaser.Easing.Linear.None).start();
-
+    player.body.gravity.y = 750;
 
     this.pillars = this.game.add.group();
 
@@ -90,68 +90,68 @@ Game.Level2.prototype = {
   
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
-    Game.score = 11;
-    this.runningTimeText = this.game.add.bitmapText(36, 20, 'minecraftia','00:00',32);
-    this.scoreText = this.game.add.bitmapText(Game.w - 264 , 16, 'minecraftia','Score:  '+Game.score, 32);
+    Game.score = 16;
+    this.deathText = this.game.add.bitmapText(Game.w - 264 , 16, 'minecraftia','Deaths:  '+Game.deaths, 32);
     this.playAgainText = this.game.add.bitmapText(this.game.world.centerX - 300, Game.h + 100, 'minecraftia','test',48);
 
+    this.messageText = this.game.add.bitmapText(this.game.world.centerX - 300, this.game.world.centerY,'minecraftia', 'I\'d fall all over\nagain....',32);
+    this.messageText.tint = 0xf660ab;
+    this.game.add.tween(this.messageText).to({alpha: 0}, 1800).start();
+
   },
-  showRunningTime: function() {
-   
-    this.runningTime = this.game.time.time - this.startTime;
-    
-    minutes = Math.floor(this.runningTime / 60000) % 60; 
-    seconds = Math.floor(this.runningTime / 1000) % 60;
-    milliseconds = Math.floor(this.runningTime) % 100;
-
-    if (minutes < 10) {
-      minutes = '0' + minutes;
-    }
-
-    if (seconds < 10) {
-      seconds = '0' + seconds;
-    }
-
-    if (milliseconds < 10) {
-      milliseconds = '0' + milliseconds;
-    }
-
-    if (minutes !== '00') {
-      this.runningTimeText.setText(minutes+':'+seconds+':'+milliseconds);
-    }else {
-      this.runningTimeText.setText(seconds+':'+milliseconds);
-    }
-
-    Game.bestTime = this.runningTime;
- },
 
   update: function() {
 
     scrollPosition -= 6;
-    background.tilePosition.y = scrollPosition * 0.3;
-    this.borderLeft.tilePosition.y = scrollPosition;
-    this.borderRight.tilePosition.y = scrollPosition;
 
-    if (player.alive === true) {
 
-      this.showRunningTime();
-      this.game.physics.arcade.collide(player, this.pillars, this.hitPillar, null, this);
-      this.game.physics.arcade.collide(group, player);
-      this.playerMovement();
+    if (Game.score < 31) {
+      background.tilePosition.y = scrollPosition * 0.3;
+      this.borderLeft.tilePosition.y = scrollPosition;
+      this.borderRight.tilePosition.y = scrollPosition;
 
+      if (player.alive === true) {
+
+        this.game.physics.arcade.collide(player, this.pillars, this.hitPillar, null, this);
+        this.game.physics.arcade.collide(group, player);
+        this.playerMovement();
+
+      }else {
+        this.playAgainText.setText('Click to Try Again?');
+
+        this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
+          this.game.add.tween(this.playAgainText).to({y: this.game.world.centerY - 100}, 255, Phaser.Easing.Linear.None).start();
+        }, this);
+
+        if (this.game.input.activePointer.isDown){
+          this.pillars.forEach(function(p) {
+            p.alive = false;
+          });
+          this.game.state.start('Level2');
+        }
+      }
     }else {
-      this.playAgainText.setText('Click to Try Again?');
+        
+      if (cutscene === false) {
+        console.log("I'm in");
+        cutscene = true;
+        player.body.velocity.x = 0;
 
-      this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
-        this.game.add.tween(this.playAgainText).to({y: this.game.world.centerY - 100}, 255, Phaser.Easing.Linear.None).start();
-      }, this);
+        //Drop to Platform
+        var p = this.game.add.tween(player).to({x: this.game.world.centerX, y : Game.h - 128}, 1000, Phaser.Easing.Linear.None, true);
 
-      if (this.game.input.activePointer.isDown){
-        this.pillars.forEach(function(p) {
-          p.alive = false;
-        });
-        this.startTime = this.game.time.time;
-        this.game.state.start('Level2');
+        // Raise the Bottom Platform
+        var b = this.game.add.tween(border).to({y : Game.h -  112}, 1000, Phaser.Easing.Linear.None, true);
+
+
+        p.onComplete.add(function () {
+          this.game.plugins.ScreenShake.start(40);
+          this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
+            this.game.state.start('Level3');
+          },this);
+
+        }, this);
+
       }
     }
 
@@ -160,13 +160,11 @@ Game.Level2.prototype = {
     console.log('ouch');
       this.playerDead();
       shakeWorld = 40;
-    // if (pillar.body.touching.left || pillar.body.touching.right) {
-    //   console.log('hit');
-    //   this.playerDead();
-    // }
   },
   playerDead: function() {
     this.game.plugins.ScreenShake.start(40);
+    Game.deaths += 1;
+    this.deathText.setText('Deaths: ' + Game.deaths);
 
     player.alive = false;
     player.kill();
@@ -178,17 +176,12 @@ Game.Level2.prototype = {
     if (player.alive === false) {
       return;
     }else {
-      this.scoreText.setText('Score:  '+ Game.score);
       Game.score += 1;
     }
     var hole = Math.floor(Math.random() * 18) ;
-     // Add the 6 pipes 
      for (var i = 0; i < 23; i++) {
-       // if (i !== hole && i !== hole + 1 && i !== hole + 2) { 
        if (i < hole || i > hole + 5) { 
-         // this.addPillar(800, i * 32 + 280);   
          this.addPillar(i * 32 + 32, Game.h);   
-         // this.addPillar(i * 32 + 280, Game.height/2);   
        }
      }
   },
@@ -213,9 +206,13 @@ Game.Level2.prototype = {
 
     this.game.physics.arcade.enable(p);
 
-    // p.body.velocity.y = -160; 
-    // p.body.velocity.y = -220; 
-    p.body.velocity.y = -250; 
+    if (Game.score < 31) {
+      p.body.velocity.y = -250; 
+    }else {
+      p.body.velocity.x = 0;
+      p.body.velocity.y = 0;
+    }
+
   },
 
   playerMovement: function() {
@@ -227,28 +224,7 @@ Game.Level2.prototype = {
     if (dKey.isDown) {
       player.body.velocity.x += 20;
     }
-    // if ((spaceKey.isDown || this.game.input.activePointer.isDown) && player.body.touching.down) {
-    //     player.body.velocity.y = -600;
-    //     this.game.add.tween(player).to({angle: player.angle - 270}, 800, Phaser.Easing.Linear.None).start();
-    //
-    // }
-    //
-    // spaceKey.onUp.add(function() {
-    //   if (player.body.velocity.y < -200) {
-    //     player.body.velocity.y = -200;
-    //   }
-    // },this);
-    //
-    // this.game.input.onUp.add(function() {
-    //   if (player.body.velocity.y < -200) {
-    //     player.body.velocity.y = -200;
-    //   }
-    // },this);
 
   },
-  // render: function()
-  // {
-  //     this.game.debug.text(this.game.time.fps || '--', 2, 14, '#00ff00');
-  // },
 
 };

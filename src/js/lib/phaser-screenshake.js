@@ -23,7 +23,6 @@ Phaser.Plugin.ScreenShake.prototype.postUpdate = function() {
     if (this.shakeWorld > 0) {
        // var rand1 = this.game.rnd.integerInRange(-20,20);
        // var rand2 = this.game.rnd.integerInRange(-20,20);
-      console.log(this.x, this.y)
 
       var rand1 = this.game.rnd.integerInRange(-this.x,this.x);
       var rand2 = this.game.rnd.integerInRange(-this.y,this.y);
@@ -33,7 +32,7 @@ Phaser.Plugin.ScreenShake.prototype.postUpdate = function() {
 
       //Normalize After the Shake
       if (this.shakeWorld == 0) {
-          this.game.world.setBounds(0, 0, this.game.width,game.height);
+          this.game.world.setBounds(0, 0, this.game.width,this.game.height);
       }
     }
 
