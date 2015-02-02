@@ -77,13 +77,13 @@ module.exports = (grunt) ->
           force: true
           jshintrc: '.jshintrc'
           ignores: ['<%= SRC_DIR %>/js/lib/**/*.js']
-        src: ['<%= SRC_DIR %>/js/lib/phaser.min.js','<%= SRC_DIR %>/js/load.js','<%= SRC_DIR %>/js/menu.js','<%= SRC_DIR %>/js/play.js','<%= SRC_DIR %>/js/game.js']
+        src: ['<%= SRC_DIR %>/js/lib/phaser.min.js','<%= SRC_DIR %>/js/lib/phaser-screenshake.js','<%= SRC_DIR %>/js/load.js','<%= SRC_DIR %>/js/menu.js','<%= SRC_DIR %>/js/level1.js','<%= SRC_DIR %>/js/level2.js','<%= SRC_DIR %>/js/level3.js','<%= SRC_DIR %>/js/game.js']
 
 
     uglify:
       dist:
         files:
-          '<%= DST_FILE %>.min.js': ['<%= SRC_DIR %>/js/lib/phaser.min.js','<%= SRC_DIR %>/js/load.js','<%= SRC_DIR %>/js/menu.js','<%= SRC_DIR %>/js/play.js','<%= SRC_DIR %>/js/game.js']
+          '<%= DST_FILE %>.min.js': ['<%= SRC_DIR %>/js/lib/phaser.min.js','<%= SRC_DIR %>/js/lib/phaser-screenshake.js','<%= SRC_DIR %>/js/load.js','<%= SRC_DIR %>/js/menu.js','<%= SRC_DIR %>/js/level1.js','<%= SRC_DIR %>/js/level2.js','<%= SRC_DIR %>/js/level3.js','<%= SRC_DIR %>/js/game.js']
 
       options:
         banner: '/*! <%= PKG.name %> v<%= PKG.version %> */\n'

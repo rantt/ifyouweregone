@@ -143,7 +143,6 @@ Game.Level1.prototype = {
   hitPillar: function(plyr, pillar) {
     console.log('ouch');
       this.playerDead();
-      shakeWorld = 40;
   },
   playerDead: function() {
     this.game.plugins.ScreenShake.start(40);
