@@ -39,11 +39,6 @@ Game.Level1.prototype = {
 
     this.timer = this.game.time.events.loop(1500, this.addPillars, this);  
 
-    // Music
-    this.music = this.game.add.sound('music');
-    this.music.volume = 0.5;
-    this.music.play('',0,1,true);
-
     Game.score = 0;
 
     this.deathText = this.game.add.bitmapText(Game.w - 230 , 16, 'minecraftia','Deaths: '+Game.deaths, 32);
@@ -79,7 +74,6 @@ Game.Level1.prototype = {
           this.pillars.forEach(function(p) {
             p.alive = false;
           });
-          this.music.stop();
           player.alive = true;
           this.game.state.start('Level1');
         }

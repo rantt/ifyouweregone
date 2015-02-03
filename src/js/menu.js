@@ -6,6 +6,10 @@ Game.Menu = function(game){
 Game.Menu.prototype =  {
     create: function() {
 
+        this.wKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+        this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.cursors = this.game.input.keyboard.createCursorKeys();
+
         background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, borderbmd);
         background.tileScale.set(4);
         background.tint = 0x222222;
@@ -30,7 +34,11 @@ Game.Menu.prototype =  {
       border.tilePosition.x = scrollPosition;
       background.tilePosition.x = scrollPosition * 0.1;
       //Click to Start
-      if (this.game.input.activePointer.isDown){
+      if (this.game.input.activePointer.isDown || this.wKey.isDown || this.spaceKey.isDown || this.cursors.up.isDown){
+        // Music
+        this.music = this.game.add.sound('music');
+        this.music.volume = 0.5;
+        this.music.play('',0,1,true);
         this.game.state.start('Level1');
       }
     }

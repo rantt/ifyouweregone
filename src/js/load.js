@@ -86,8 +86,6 @@ Game.Load.prototype = {
 
     // Music Track
     this.game.load.audio('music','assets/audio/in_the_name_of_all.mp3');
-    // this.game.load.audio('jump','assets/audio/jump.wav');
-    // this.game.load.audio('dead','assets/audio/dead.wav');
 
   },
   create: function() {
