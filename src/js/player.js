@@ -79,6 +79,22 @@ Player.prototype = {
 
 
   },
+  frontFlip: function() {
+     if (this.flipping) {
+       return;
+     } 
+     this.flipping = true;
+     var t;
+     if ( this.facing !== 'left') {
+       var f = this.game.add.tween(this.sprite).to({angle: this.sprite.angle + 180}, 600, Phaser.Easing.Linear.None).start();
+     }else {
+       var f = this.game.add.tween(this.sprite).to({angle: this.sprite.angle - 180}, 600, Phaser.Easing.Linear.None).start();
+     }
+     f.onComplete.add(function() {
+       this.flipping = false;
+     },this);
+
+  },
   movements: function() {
     self = this;
 
@@ -95,12 +111,7 @@ Player.prototype = {
       if ((spaceKey.isDown || this.game.input.activePointer.isDown || cursors.up.isDown || wKey.isDown) && this.sprite.body.touching.down) {
           this.jumpSnd.play();
           this.sprite.body.velocity.y = -600;
-          if ( this.facing !== 'left') {
-            this.game.add.tween(this.sprite).to({angle: this.sprite.angle + 180}, 600, Phaser.Easing.Linear.None).start();
-          }else {
-            this.game.add.tween(this.sprite).to({angle: this.sprite.angle - 180}, 600, Phaser.Easing.Linear.None).start();
-          }
-
+          this.frontFlip();
       }
 
       spaceKey.onUp.add(function() {

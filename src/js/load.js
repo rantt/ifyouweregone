@@ -56,20 +56,6 @@ Game.Load.prototype = {
     player = new Player(this.game);
     player.preload(); 
     
-    // //Draw a white square
-    // playerbmd = this.game.add.bitmapData(32, 32);
-    // playerbmd.ctx.strokeStyle = '#000';
-    // playerbmd.ctx.rect(0, 0, 32, 32);
-    // playerbmd.ctx.fillStyle = '#fff';
-    // playerbmd.ctx.fill();
-    //
-    // debris = this.game.add.bitmapData(8, 8);
-    // debris.ctx.strokeStyle = '#000';
-    // debris.ctx.rect(0, 0, 32, 32);
-    // // debris.ctx.fillStyle = '#fff';
-    // debris.ctx.fillStyle = '#f660ab';
-    // debris.ctx.fill();
-
     //Draw a black and white checker board
     borderbmd = this.game.add.bitmapData(32, 32);
     borderbmd.ctx.rect(0, 0, 32, 32);
