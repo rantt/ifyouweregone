@@ -33,7 +33,7 @@ Game.Level1.prototype = {
     border.body.immovable = true;
     border.body.allowGravity = false;
 
-    player.create();
+    player.create(128, this.game.world.centerY);
 
     this.pillars = this.game.add.group();
 
@@ -89,6 +89,8 @@ Game.Level1.prototype = {
     }else {
       background.tilePosition.y = scrollPosition * 0.3;
       if (cutscene === false) {
+        this.game.time.events.remove(this.timer); 
+
         cutscene = true;
         player.sprite.body.velocity.y = 0;
         player.sprite.body.allowGravity = false;
@@ -139,11 +141,9 @@ Game.Level1.prototype = {
       p.outOfBoundsKill = true;
       p.body.immovable = true;
       this.pillars.add(p);
-      console.log('create pillar');
     }else {
       p = this.pillars.getFirstExists(false);
       p.reset(x, y);
-      console.log('rez pillar');
     }
 
     p.tint = 0xff0000;

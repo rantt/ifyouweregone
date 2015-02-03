@@ -12,8 +12,10 @@ var Player = function(game) {
   this.game = game;
   this.sprite = null;
   this.alive = true;
+  this.facing = 'right';
   this.playerbmd = null;
   this.debris = null;
+  this.level = 0;
 };
 
 Player.prototype = {
@@ -32,13 +34,23 @@ Player.prototype = {
     this.debris.ctx.fill();
 
   },
-  create: function() {
-    this.sprite = this.game.add.sprite(128, this.game.world.centerY, this.playerbmd);
+  create: function(x, y, lvl) {
+
+    // this.sprite = this.game.add.sprite(128, this.game.world.centerY, this.playerbmd);
+    this.sprite = this.game.add.sprite(x, y, this.playerbmd);
+    this.level = lvl;
+
     this.game.physics.arcade.enable(this.sprite);
     this.sprite.enableBody = true;
     this.sprite.anchor.set(0.5);
     this.sprite.tint = 0xf660ab;
-    this.sprite.body.gravity.y = 750;
+
+    if (lvl !== 2) {
+      this.sprite.body.gravity.y = 750;
+    }else {
+      this.sprite.body.allowGravity = false;
+    }
+    
     console.log(this.sprite.body.velocity.y);
 
     //Setup WASD and extra keys
@@ -67,35 +79,67 @@ Player.prototype = {
   },
   movements: function() {
     self = this;
-    
-    if ((spaceKey.isDown || this.game.input.activePointer.isDown || cursors.up.isDown || wKey.isDown) && this.sprite.body.touching.down) {
-        this.jumpSnd.play();
-        this.sprite.body.velocity.y = -600;
-        this.game.add.tween(this.sprite).to({angle: this.sprite.angle - 270}, 800, Phaser.Easing.Linear.None).start();
 
-    }
-
-    spaceKey.onUp.add(function() {
-      lowJump();
-    },this);
-
-    this.game.input.onUp.add(function() {
-      lowJump();
-    },this);
-
-    wKey.onUp.add(function() {
-      lowJump();
-    },this);
-
-    cursors.up.onUp.add(function() {
-      lowJump();
-    },this);
-
-    function lowJump() {
-      if (self.sprite.body.velocity.y < -200) {
-        self.sprite.body.velocity.y = -200;
+    if (this.level === 2) {
+      if (aKey.isDown || cursors.left.isDown) {
+        this.sprite.body.velocity.x -= 20;
       }
+      
+      if (dKey.isDown || cursors.right.isDown) {
+        this.sprite.body.velocity.x += 20;
+      }
+
+    }else {
+      if ((spaceKey.isDown || this.game.input.activePointer.isDown || cursors.up.isDown || wKey.isDown) && this.sprite.body.touching.down) {
+          this.jumpSnd.play();
+          this.sprite.body.velocity.y = -600;
+          // this.game.add.tween(this.sprite).to({angle: this.sprite.angle - 270}, 800, Phaser.Easing.Linear.None).start();
+          if ( this.facing === 'left') {
+            this.game.add.tween(this.sprite).to({angle: this.sprite.angle + 180}, 600, Phaser.Easing.Linear.None).start();
+          }else {
+            this.game.add.tween(this.sprite).to({angle: this.sprite.angle - 180}, 600, Phaser.Easing.Linear.None).start();
+          }
+
+      }
+
+      spaceKey.onUp.add(function() {
+        lowJump();
+      },this);
+
+      this.game.input.onUp.add(function() {
+        lowJump();
+      },this);
+
+      wKey.onUp.add(function() {
+        lowJump();
+      },this);
+
+      cursors.up.onUp.add(function() {
+        lowJump();
+      },this);
+
+      function lowJump() {
+        if (self.sprite.body.velocity.y < -200) {
+          self.sprite.body.velocity.y = -200;
+        }
+      }
+
+      if (this.level === 3) {
+        this.sprite.body.velocity.x = 0;
+
+        if (aKey.isDown || cursors.left.isDown) {
+          this.sprite.body.velocity.x = -300;
+          this.facing = 'left';
+        }
+        if (dKey.isDown || cursors.right.isDown) {
+          this.sprite.body.velocity.x = 300;
+          this.facing = 'right';
+        }
+
+      }
+
     }
+    
   },
   isDead: function() {
     this.game.plugins.ScreenShake.start(40);
