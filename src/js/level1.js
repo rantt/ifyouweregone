@@ -89,7 +89,6 @@ Game.Level1.prototype = {
         player.sprite.body.velocity.y = 0;
         player.sprite.body.allowGravity = false;
         var p = this.game.add.tween(player.sprite).to({x: this.game.world.centerX, y : this.game.world.centerY - 100}, 2000, Phaser.Easing.Linear.None, true);
-
           this.pillars.forEach(function(p) {
             p.body.velocity.x = 0;
             p.body.velocity.y = -500;

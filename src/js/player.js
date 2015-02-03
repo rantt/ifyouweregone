@@ -95,7 +95,6 @@ Player.prototype = {
       if ((spaceKey.isDown || this.game.input.activePointer.isDown || cursors.up.isDown || wKey.isDown) && this.sprite.body.touching.down) {
           this.jumpSnd.play();
           this.sprite.body.velocity.y = -600;
-          // this.game.add.tween(this.sprite).to({angle: this.sprite.angle - 270}, 800, Phaser.Easing.Linear.None).start();
           if ( this.facing !== 'left') {
             this.game.add.tween(this.sprite).to({angle: this.sprite.angle + 180}, 600, Phaser.Easing.Linear.None).start();
           }else {

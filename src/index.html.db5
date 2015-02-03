@@ -7,11 +7,15 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>Game Title</title>
+	<title>If You Were Gone...</title>
 	
 	<!-- build:css main.min.css -->
 	<link rel="stylesheet" type="text/css" href="css/style.css"/>
 	<!-- /build -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="/css/style.css">
+
 
 	<script type="text/javascript" src="js/lib/phaser.min.js"></script>
 	<!-- build:js main.min.js -->
