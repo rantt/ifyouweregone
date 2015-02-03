@@ -33,6 +33,8 @@ Player.prototype = {
     this.debris.ctx.fillStyle = '#f660ab';
     this.debris.ctx.fill();
 
+    this.game.load.audio('jump','assets/audio/jump.wav');
+    this.game.load.audio('dead','assets/audio/dead.wav');
   },
   create: function(x, y, lvl) {
 
@@ -94,7 +96,7 @@ Player.prototype = {
           this.jumpSnd.play();
           this.sprite.body.velocity.y = -600;
           // this.game.add.tween(this.sprite).to({angle: this.sprite.angle - 270}, 800, Phaser.Easing.Linear.None).start();
-          if ( this.facing === 'left') {
+          if ( this.facing !== 'left') {
             this.game.add.tween(this.sprite).to({angle: this.sprite.angle + 180}, 600, Phaser.Easing.Linear.None).start();
           }else {
             this.game.add.tween(this.sprite).to({angle: this.sprite.angle - 180}, 600, Phaser.Easing.Linear.None).start();
