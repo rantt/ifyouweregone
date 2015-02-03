@@ -1,25 +1,17 @@
-Main Idea
-====
+# If You Were Gone...
 
 
-A simple starter template to build html5 games using the Phaser framework.
+A few examples of an endless runner.  Designed for the onegamea mong.com (#1GAM) challenge.  The theme was "Resolution", so this has a simple story of a relationship being resolved and the characters/environment are in simple geometric low resolution.
 
-All the code has been taken from;
-https://www.npmjs.org/package/generator-phaser-mobile
+Developed using [Phaser.js](http://phaser.io)
 
+Music
 
-Instructions
-----
+*  [In The Name of All (NES Version)](http://opengameart.org/content/in-the-name-of-all-nes-version) by Snabisch
 
-1) fork this repo
+SFX - None so far
 
-2) install grunt and all dependencies
-```
-npm install grunt-cli
-npm install
-grunt setup
-```
+Sprites
 
-3) Enjoy!
-
-4) Remember to comment out the debug plugin before running `grunt dist`.
+* Drawn at runtime using bitmap data.
+  
