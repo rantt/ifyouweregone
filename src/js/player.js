@@ -158,6 +158,7 @@ Player.prototype = {
     this.deadSnd.play();
 
     this.alive = false;
+    this.flipping = false;
     this.sprite.kill();
     this.emitter.x = this.sprite.x;
     this.emitter.y = this.sprite.y;
