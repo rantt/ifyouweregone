@@ -1,7 +1,13 @@
 # If You Were Gone...
 
 
-A few examples of an endless runner.  Designed for the onegamea mong.com (#1GAM) challenge.  The theme was "Resolution", so this has a simple story of a relationship being resolved and the characters/environment are in simple geometric low resolution.
+A few examples of an endless runner.
+
+*	The Run - side-scrolling runner
+* 	The Fall - Dodging platforms in a free fall.
+*  The Climb - Jump from platform to platform moving upward.
+
+Designed for the onegameamonth.com (#1GAM) challenge.  The theme was "Resolution", so this has a simple story of a relationship being resolved and the characters/environment are in simple geometric low resolution.
 
 Developed using [Phaser.js](http://phaser.io)
 
