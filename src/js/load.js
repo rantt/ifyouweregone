@@ -19,6 +19,7 @@ Game.Boot = function(game) {
 
 Game.Boot.prototype = {
   preload: function() {
+    this.game.renderer.renderSession.roundPixels = true;
 		this.game.stage.backgroundColor = '#FFF';
 		this.game.load.image('loading', 'assets/images/loading.png');
 		this.game.load.image('title', 'assets/images/title.png');
@@ -77,15 +78,16 @@ Game.Load.prototype = {
     borderbmd.ctx.beginPath();
     borderbmd.ctx.rect(0, 0, 16, 16);  
     borderbmd.ctx.rect(16, 16, 16, 16);
-    borderbmd.ctx.fillStyle = '#ff0000';
+    borderbmd.ctx.fillStyle = '#00bfff'; //blue
+
     borderbmd.ctx.fill();
 
     this.game.load.image('twitter','assets/images/twitter.png');
 
     // Music Track
     this.game.load.audio('music','assets/audio/in_the_name_of_all.mp3');
-    this.game.load.audio('jump','assets/audio/jump.wav');
-    this.game.load.audio('dead','assets/audio/dead.wav');
+    // this.game.load.audio('jump','assets/audio/jump.wav');
+    // this.game.load.audio('dead','assets/audio/dead.wav');
 
   },
   create: function() {
