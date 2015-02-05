@@ -37,8 +37,7 @@ Game.Menu.prototype =  {
       if (this.game.input.activePointer.isDown || this.wKey.isDown || this.spaceKey.isDown || this.cursors.up.isDown){
         // Music
         this.music = this.game.add.sound('music');
-        this.music.volume = 0.5;
-        this.music.play('',0,1,true);
+        this.music.play('',0,0.3,true);
         this.game.state.start('Level1');
       }
     }

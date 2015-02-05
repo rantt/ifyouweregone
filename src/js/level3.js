@@ -153,6 +153,7 @@ Game.Level3.prototype = {
         this.playAgainText.setText("Don't Give Up!");
         this.playAgainText.tint = 0x00bfff;
 
+
         this.game.time.events.add(Phaser.Timer.SECOND * 1.5, function() { 
           this.game.add.tween(this.playAgainText).to({y: 200}, 255, Phaser.Easing.Linear.None).start();
           if (this.game.input.activePointer.isDown || wKey.isDown || spaceKey.isDown || cursors.up.isDown){
@@ -176,6 +177,7 @@ Game.Level3.prototype = {
     this.twitterButton = this.game.add.button(450, 275,'twitter', this.twitter, this);
     this.twitterButton.fixedToCamera = true;
 
+    player.sprite.body.velocity.x = 0;
     deathwave.body.velocity.y = 0;
 
   },
