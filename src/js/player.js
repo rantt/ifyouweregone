@@ -53,8 +53,6 @@ Player.prototype = {
       this.sprite.body.allowGravity = false;
     }
     
-    console.log(this.sprite.body.velocity.y);
-
     //Setup WASD and extra keys
     wKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
     aKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
