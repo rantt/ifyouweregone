@@ -37,7 +37,7 @@ Game.Level1.prototype = {
 
     this.pillars = this.game.add.group();
 
-    this.timer = this.game.time.events.loop(1500, this.addPillars, this);  
+    this.timer = this.game.time.events.loop(1600, this.addPillars, this);  
 
     Game.score = 0;
 
