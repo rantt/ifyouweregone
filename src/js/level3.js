@@ -167,18 +167,21 @@ Game.Level3.prototype = {
 
   },
   youWin: function() {
-    this.messageText = this.game.add.bitmapText(this.game.world.centerX - 350, 150,'minecraftia', '...because I love you.',32);
-    this.messageText.tint = 0xf660ab;
-    this.messageText.alpha = 1;
-    this.youWinText = this.game.add.bitmapText(this.game.world.centerX - 350, 200, 'minecraftia','You never gave up.\nNeither did I.\nLet\'s go home.',32);
-    this.youWinText.tint = 0x00bfff;
-    win = true;
+    if (win === true) {
+      return;
+    } 
+      this.messageText = this.game.add.bitmapText(this.game.world.centerX - 350, 150,'minecraftia', '...because I love you.',32);
+      this.messageText.tint = 0xf660ab;
+      this.messageText.alpha = 1;
+      this.youWinText = this.game.add.bitmapText(this.game.world.centerX - 350, 200, 'minecraftia','You never gave up.\nNeither did I.\nLet\'s go home.',32);
+      this.youWinText.tint = 0x00bfff;
+      win = true;
 
-    this.twitterButton = this.game.add.button(450, 275,'twitter', this.twitter, this);
-    this.twitterButton.fixedToCamera = true;
+      this.twitterButton = this.game.add.button(450, 275,'twitter', this.twitter, this);
+      this.twitterButton.fixedToCamera = true;
 
-    player.sprite.body.velocity.x = 0;
-    deathwave.body.velocity.y = 0;
+      player.sprite.body.velocity.x = 0;
+      deathwave.body.velocity.y = 0;
 
   },
   bounce: function(platform) {
